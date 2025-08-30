@@ -1,0 +1,30 @@
+From ee800c03c6e0566a8d22a2f6ff9def7808a2047e Mon Sep 17 00:00:00 2001
+From: Jean-Roland Schuler <jean-roland.schuler@hefr.ch>
+Date: Tue, 20 Jun 2023 13:21:20 +0200
+Subject: [PATCH] modif
+
+---
+ arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
+index a56fae761..ad6dd760d 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
+@@ -6,6 +6,13 @@
+ #include <dt-bindings/thermal/thermal.h>
+ 
+ / {
++	aliases {
++		mmc0 = &mmc0;
++		mmc1 = &mmc1;
++		mmc2 = &mmc2;
++	};
++
++
+ 	cpus {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-- 
+2.38.1
+

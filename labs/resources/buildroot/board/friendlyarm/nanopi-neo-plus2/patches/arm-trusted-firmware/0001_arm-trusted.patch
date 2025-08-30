@@ -1,0 +1,16 @@
+ services/std_svc/psci/psci_private.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/std_svc/psci/psci_private.h b/services/std_svc/psci/psci_private.h
+index 24a5604..bf0b384 100644
+--- a/services/std_svc/psci/psci_private.h
++++ b/services/std_svc/psci/psci_private.h
+@@ -101,7 +101,7 @@ void psci_acquire_afflvl_locks(int start_afflvl,
+ 			       aff_map_node_t *mpidr_nodes[]);
+ void psci_release_afflvl_locks(int start_afflvl,
+ 				int end_afflvl,
+-				mpidr_aff_map_nodes_t mpidr_nodes);
++			       aff_map_node_t *mpidr_nodes[]);
+ void psci_print_affinity_map(void);
+ void psci_set_max_phys_off_afflvl(uint32_t afflvl);
+ uint32_t psci_find_max_phys_off_afflvl(uint32_t start_afflvl,
