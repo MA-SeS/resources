@@ -1,5 +1,5 @@
 # Ubuntu version
-ARG VARIANT="24.04"
+ARG VARIANT="22.04"
 FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-${VARIANT}
 
 WORKDIR /root
