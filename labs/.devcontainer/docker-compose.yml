@@ -17,6 +17,12 @@ services:
     
     volumes:
       - ..:/workspace
-      
+      - buildroot-data:/buildroot
+
     # Overrides default command so things don't shut down after the process ends.
     command: /bin/sh -c "while sleep 1000; do :; done"  
+
+# we create a volume for buildroot to avoid any problems with the "fakeowner" bug in
+volumes:
+  buildroot-data:
+    driver: local
