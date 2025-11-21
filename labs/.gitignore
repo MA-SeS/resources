@@ -1,3 +1,6 @@
-buildroot/
-buildroot2/
-buildroot3/
+buildroot
+buildroot2
+buildroot3
+sdcard*
+labs/
+work/
