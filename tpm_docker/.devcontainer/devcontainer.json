@@ -1,0 +1,15 @@
+{
+	"name": "TPM Docker",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "tpm",
+	"workspaceFolder": "/tpm2",
+	"forwardPorts": [2321, 2322],
+	"overrideCommand": true,
+	"postCreateCommand": "echo '\n\\033[1mIssue the following command in your SeS devcontainer:\\033[0m\napt update && apt install -y tpm2-tools\n'",
+	"customizations": {
+		"vscode": {
+			"settings": {},
+			"extensions": []
+		}
+	}
+}

@@ -1,0 +1,13 @@
+services:
+  tpm:
+    build: .
+    container_name: tpm
+    ports:
+      - "2321:2321"
+      - "2322:2322"
+    stdin_open: true
+    tty: true
+    entrypoint: []
+    hostname: tpmserver
+    #command: ["/bin/sh", "-c", "while sleep 1000; do :; done"]
+    command: ["/bin/sh","swtpm", "socket", "--tpmstate", "dir=/tpm2/tpm", "--tpm2", "--server", "type=tcp,port=2321,bindaddr=0.0.0.0", "--ctrl", "type=tcp,port=2322,bindaddr=0.0.0.0", "--flags", "not-need-init,startup-clear"]
