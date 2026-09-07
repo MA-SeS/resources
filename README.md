@@ -10,30 +10,8 @@ labs/
 │   │   └── Dockerfile
 │   └── docker-compose.yml
 └── resources
-    └── buildroot
-        ├── board
-        │   └── friendlyarm
-        │       └── nanopi-neo-plus2
-        │           ├── boot.cmd
-        │           ├── genimage.cfg
-        │           ├── patches
-        │           │   ├── arm-trusted-firmware
-        │           │   │   └── 0001_arm-trusted.patch
-        │           │   └── linux
-        │           │       └── 0001-linux-sun50i-h5-dtsi.patch
-        │           ├── post-build.sh
-        │           ├── readme.txt
-        │           ├── rootfs_overlay
-        │           │   ├── etc
-        │           │   │   ├── network
-        │           │   │   │   └── interfaces
-        │           │   │   └── ssh
-        │           │   │       └── sshd_config
-        │           │   └── lib
-        │           │       └── firmware
-        │           │           └── brcm
-        │           │               └── brcmfmac43430-sdio.friendlyarm,nanopi-neo-plus2.txt
-        │           └── uboot-extras.config
-        └── configs
-            └── ses_defconfig
+    └── utilities
+        └── sd_copy.sh
 ```
+
+**Important note**: in order for the copy of the compiled image to work, one needs to have a `sd_folder` under `/workspace` for it to work. If one chooses a different structure, the person needs to adapt the `sd_copy.sh` script.
