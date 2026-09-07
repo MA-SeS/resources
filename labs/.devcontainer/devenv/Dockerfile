@@ -2,7 +2,8 @@
 ARG VARIANT="22.04"
 FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-${VARIANT}
 
-WORKDIR /root
+# CRITICAL: Change directory away from root's home so vscode can access it
+WORKDIR /workspace
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -40,4 +41,9 @@ RUN apt update && apt install --no-install-recommends -y \
     tree \
     qalc \
     bc   \
-    ruby 
+    ruby && \
+    # Clean up apt caches to keep the container lightweight
+    apt-get clean && rm -rf /var/lib/lists/*
+
+# ENSURE VSCODE USER IS ACTIVE:
+USER vscode

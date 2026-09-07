@@ -1,5 +1,5 @@
 {
-	"name": "ses",
+	"name": "ses - Buildroot RPi4 Development Space",
     "dockerComposeFile": "docker-compose.yml",
     "service": "toolchain",
     "workspaceFolder": "/workspace",
@@ -9,5 +9,5 @@
     "extensions": [
         "ms-vscode.cpptools"
     ],
-    "remoteUser": "root"
+    "remoteUser": "vscode"
 }

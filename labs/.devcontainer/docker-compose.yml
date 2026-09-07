@@ -11,16 +11,21 @@ services:
     #- seccomp:unconfined
 
     privileged: true
+
+    user: vscode
     
     environment:
     - TZ=Europe/Zurich
+    # Keep Buildroot's configuration and generated files on the same filesystem
+    # as its output. This avoids cross-device rename failures in syncconfig.
+    - O=/workspace/buildroot/output
     
     volumes:
       - ..:/workspace
-      - buildroot-data:/buildroot
+      - buildroot-data:/workspace/buildroot
 
-    # Overrides default command so things don't shut down after the process ends.
-    command: /bin/sh -c "while sleep 1000; do :; done"  
+    # Clone Buildroot into the volume on first startup, then keep the container alive.
+    command: /bin/sh -c "set -e; if [ ! -f /workspace/buildroot/Makefile ]; then git clone --branch 2025.02.x --single-branch https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts origin/2025.02.x; fi; exec /bin/sh -c 'while sleep 1000; do :; done'"
 
 # we create a volume for buildroot to avoid any problems with the "fakeowner" bug in
 volumes:
