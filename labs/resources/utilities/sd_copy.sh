@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # Copy the generated sdcard image 
-SRC="buildroot/output/images/sdcard.img"
-DST_DIR="sd_folder"
+SRC="/workspace/buildroot/output/images/sdcard.img"
+DST_DIR="/workspace/sd_dir"
 
 if [ ! -f "$SRC" ]; then
 	echo "ERROR: source image not found: $SRC" >&2
