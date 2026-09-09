@@ -5,9 +5,7 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu${VARIANT}
 # CRITICAL: Change directory away from root's home so vscode can access it
 WORKDIR /workspace
 
-# To mitigate permissions issue on Linux, otherwise container fails to start with the error below.
-# TODO: fix the buildroot dir so it's not owned by root
-#
+# To mitigate permission issue on Linux, otherwise container fails to start with the error below:
 # Cloning into '/workspace/buildroot'...
 # /workspace/buildroot/.git: Permission denied
 RUN mkdir buildroot && chown vscode:vscode buildroot

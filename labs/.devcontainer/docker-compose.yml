@@ -25,7 +25,7 @@ services:
       - buildroot-data:/workspace/buildroot
 
     # Clone Buildroot into the volume on first startup, then keep the container alive.
-    command: /bin/sh -c "set -e; if [ ! -f /workspace/buildroot/Makefile ]; then git clone https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts 2025.02.17; fi; exec /bin/sh -c 'while sleep 1000; do :; done'"
+    command: /bin/sh -c "set -e; chown vscode:vscode /workspace/buildroot ; if [ ! -f /workspace/buildroot/Makefile ]; then git clone https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts 2025.02.17; fi; exec /bin/sh -c 'while sleep 1000; do :; done'"
 
 # we create a volume for buildroot to avoid any problems with the "fakeowner" bug in
 volumes:
