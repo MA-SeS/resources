@@ -1,0 +1,13 @@
+{
+	"name": "ses - Buildroot RPi4 Development Space",
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "toolchain",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "runArgs": ["--privileged"],
+    "settings": {},
+    "extensions": [
+        "ms-vscode.cpptools"
+    ],
+    "remoteUser": "vscode"
+}

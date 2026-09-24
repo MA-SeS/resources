@@ -12,7 +12,7 @@ RUN mkdir buildroot && chown vscode:vscode buildroot
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     man \
     net-tools \
     iputils-ping \

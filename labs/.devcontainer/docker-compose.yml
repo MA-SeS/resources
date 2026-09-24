@@ -1,7 +1,8 @@
 services:
+
   toolchain:
     build:
-      context: devenv
+      context: buildroot/devenv
       dockerfile: Dockerfile
   
     #cap_add:
@@ -9,9 +10,6 @@ services:
 
     #security_opt:
     #- seccomp:unconfined
-
-    # to make network interfaces accessible, required to run the tftp server in the container (instead of the host)
-    network_mode: "host"
 
     privileged: true
 
@@ -26,12 +24,41 @@ services:
     volumes:
       - ..:/workspace
       - buildroot-data:/workspace/buildroot
+      - tftpd-data:/workspace/tftpd
+      - nfs-rootfs:/workspace/nfs-rootfs
 
     # Clone Buildroot into the volume on first startup, then keep the container alive.
     command: /bin/sh -c "set -e; chown vscode:vscode /workspace/buildroot ; if [ ! -f /workspace/buildroot/Makefile ]; then git clone https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts 2025.02.17; fi; exec /bin/sh -c 'while sleep 1000; do :; done'"
 
+  servers:
+    build:
+      context: servers/ctxt
+      dockerfile: Dockerfile
+
+    privileged: true
+
+    user: vscode
+
+    # to make network interfaces accessible; required by tftp/nfs services
+    network_mode: "host"
+
+    volumes:
+      - ..:/workspace
+      - buildroot-data:/workspace/buildroot
+      - tftpd-data:/workspace/tftpd
+      - nfs-rootfs:/workspace/nfs-rootfs
+
+    command: sleep infinity
+
 # we create a volume for buildroot to avoid any problems with the "fakeowner" bug in
+# tftpd-data is to store files to be served by the tftpd service
+# nfs-rootfs is Linux root filesystem served by the nfsd service
 volumes:
   buildroot-data:
     driver: local
 
+  tftpd-data:
+    driver: local
+
+  nfs-rootfs:
+    driver: local

@@ -1,7 +1,7 @@
 {
-	"name": "ses - Buildroot RPi4 Development Space",
-    "dockerComposeFile": "docker-compose.yml",
-    "service": "toolchain",
+	"name": "ses - Services (tftpd, nfsd)",
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "servers",
     "workspaceFolder": "/workspace",
     "shutdownAction": "stopCompose",
     "runArgs": ["--privileged"],
