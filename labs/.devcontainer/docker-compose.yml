@@ -10,6 +10,9 @@ services:
     #security_opt:
     #- seccomp:unconfined
 
+    # to make network interfaces accessible, required to run the tftp server in the container (instead of the host)
+    network_mode: "host"
+
     privileged: true
 
     user: vscode
@@ -31,3 +34,4 @@ services:
 volumes:
   buildroot-data:
     driver: local
+
