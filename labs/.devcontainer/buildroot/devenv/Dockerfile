@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     net-tools \
     iputils-ping \
     netcat-openbsd \
+    bc \
     curl \
+    cpio \
     gpg \
     gcc \
     g++ \
