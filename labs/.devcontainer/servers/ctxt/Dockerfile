@@ -6,6 +6,8 @@ WORKDIR /workspace
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN mkdir /var/run/ganesha
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
     man \
     net-tools \
@@ -19,5 +21,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 COPY tftpd-hpa /etc/default/
 COPY ganesha.conf /etc/ganesha/
+
+RUN ganesha.nfsd -L /var/log/nfs.log
 
 USER vscode
