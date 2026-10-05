@@ -13,14 +13,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     tree \
     tftpd-hpa \
     u-boot-tools \
-    nfs-kernel-server \
+    nfs-ganesha nfs-ganesha-vfs \
     # Clean up apt caches to keep the container lightweight
     && apt-get clean && rm -rf /var/lib/lists/*
 
 COPY tftpd-hpa /etc/default/
-COPY exports /etc/
-
-# Fixes a link issue when starting the rpcbind service
-RUN install -d -m 0755 /run/sendsigs.omit.d
+COPY ganesha.conf /etc/ganesha/
 
 USER vscode
