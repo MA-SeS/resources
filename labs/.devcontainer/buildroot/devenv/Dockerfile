@@ -50,7 +50,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     bc   \
     ruby && \
     # Clean up apt caches to keep the container lightweight
-    apt-get clean && rm -rf /var/lib/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ENSURE VSCODE USER IS ACTIVE:
 USER vscode
