@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     u-boot-tools \
     nfs-kernel-server \
     # Clean up apt caches to keep the container lightweight
-    && apt-get clean && rm -rf /var/lib/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY tftpd-hpa /etc/default/
 COPY exports /etc/
