@@ -6,6 +6,8 @@ WORKDIR /workspace
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN mkdir /var/run/ganesha
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
     man \
     net-tools \
@@ -13,14 +15,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     tree \
     tftpd-hpa \
     u-boot-tools \
-    nfs-kernel-server \
+    nfs-ganesha nfs-ganesha-vfs \
     # Clean up apt caches to keep the container lightweight
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY tftpd-hpa /etc/default/
-COPY exports /etc/
+COPY ganesha.conf /etc/ganesha/
 
-# Fixes a link issue when starting the rpcbind service
-RUN install -d -m 0755 /run/sendsigs.omit.d
-
-USER vscode
+#RUN ganesha.nfsd -L /var/log/ganesha/ganesha.log
