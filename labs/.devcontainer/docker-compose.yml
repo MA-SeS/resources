@@ -39,8 +39,11 @@ services:
 
     user: vscode
 
-    # to make network interfaces accessible; required by tftp/nfs services
-    network_mode: "host"
+    # Published ports for tftp and nfs services, on all interfaces
+    ports:
+      - "69:69/udp"        # TFTP
+      - "2049:2049/tcp"    # NFS
+      - "20048:20048/tcp"  # NFS mountd
 
     volumes:
       - ..:/workspace
@@ -50,7 +53,7 @@ services:
 
     command: sleep infinity
 
-# we create a volume for buildroot to avoid any problems with the "fakeowner" bug in
+# We create a volume for buildroot to avoid any problems with the "fakeowner" bug in
 # tftpd-data is to store files to be served by the tftpd service
 # nfs-rootfs is Linux root filesystem served by the nfsd service
 volumes:
