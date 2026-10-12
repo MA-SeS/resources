@@ -14,6 +14,7 @@ labs/
 │       └── devcontainer.json
 └── resources
     └── utilities
+        ├── nfs_rootfs.sh
         └── sd_copy.sh
 ```
 
@@ -70,7 +71,32 @@ sudo mkdir -p /mnt/nfs-rootfs
 sudo mount -t nfs4 -o vers=4.1 <server-address>:/ /mnt/nfs-rootfs
 ```
 
-The current Ganesha configuration grants read/write access only to `192.168.1.2`, `127.0.0.1`, and `::1`. If the client uses a different IP, add that client IP or its intended subnet to `CLIENTS` in `.devcontainer/servers/ctxt/ganesha.conf`, then rebuild/reopen the Dev Container so the updated config is copied into the server image. NFS uses `No_Root_Squash`, so only grant access to trusted clients.
+The Ganesha configuration grants read/write access to `192.168.1.2`, the Docker bridge range `172.16.0.0/12`, `127.0.0.1`, and `::1`. The Docker range is needed because, with Docker Desktop, every connection to the published port arrives from the Docker bridge gateway rather than from the real client. Ganesha therefore cannot tell clients apart, so on Windows the [Windows host setup](#windows-host-setup) firewall rule is what restricts access to the lab device. To change the list, edit `Clients` in `.devcontainer/servers/ctxt/ganesha.conf`, then rebuild/reopen the Dev Container so the updated config is copied into the server image. NFS uses `No_Root_Squash`, so only grant access to trusted clients.
+
+Only NFSv4 over TCP 2049 is served (no rpcbind/mountd), so clients must request `vers=4.x`.
+
+### Booting the target with an NFS root filesystem
+
+The default `raspberrypi4_64_defconfig` kernel already contains everything needed for an NFS root (`CONFIG_ROOT_NFS`, NFSv4.1, `CONFIG_IP_PNP` and the built-in Ethernet driver). The kernel is still loaded from the SD card; only the root filesystem comes from the server.
+
+1. In Buildroot, enable **Filesystem images > tar the root filesystem** (`BR2_TARGET_ROOTFS_TAR=y`), for example with `make menuconfig`, then run `make`. This produces `output/images/rootfs.tar` next to `sdcard.img`.
+2. From the `toolchain` container, unpack it into the NFS export:
+
+   ```sh
+   bash /workspace/resources/utilities/nfs_rootfs.sh
+   ```
+
+   The helper replaces the contents of `/workspace/nfs-rootfs` as root (preserving ownership, permissions, and device nodes) and prints the matching kernel command line. Override `SERVER_IP` (default `192.168.1.10`, the PC's address on the lab link), `CLIENT_IP` (default `192.168.1.2`), or `NETMASK` if your addresses differ, for example `SERVER_IP=192.168.1.20 bash ...`.
+3. Flash `sdcard.img` as described in [Copying an image to the host](#copying-an-image-to-the-host). Then open the SD card's boot partition on the PC and replace the contents of `cmdline.txt` with the printed line. It must stay a single line:
+
+   ```
+   root=/dev/nfs nfsroot=192.168.1.10:/,vers=4.1,proto=tcp rw ip=192.168.1.2:192.168.1.10::255.255.255.0::eth0:off console=tty1 console=ttyAMA0,115200
+   ```
+
+   `ip=` configures `eth0` statically in the kernel, before the root filesystem is mounted. Buildroot's `/etc/network/nfs_check` then skips DHCP on `eth0` during boot, so the NFS connection is not interrupted.
+4. Boot the target and watch the serial console (115200 baud). After a successful boot, `mount` on the target shows `192.168.1.10:/ on / type nfs4`.
+
+If the boot hangs at `VFS: Unable to mount root fs via NFS`, check that the firewall rule for TCP 2049 exists and that `servers` is running. The server logs to `/var/log/ganesha/ganesha.log` inside the container. Just after `servers` starts, Ganesha is in a 90-second grace period, which can delay the first boot.
 
 ## Windows host setup
 
