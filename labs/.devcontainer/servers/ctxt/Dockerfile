@@ -13,15 +13,15 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     net-tools \
     iputils-ping \
     tree \
-    tftpd-hpa \
+    dnsmasq-base \
     u-boot-tools \
     nfs-ganesha nfs-ganesha-vfs \
     # Clean up apt caches to keep the container lightweight
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY tftpd-hpa /etc/default/
+COPY dnsmasq-tftp.conf /etc/
 COPY ganesha.conf /etc/ganesha/
 
-RUN sed -i 's/\r$//' /etc/default/tftpd-hpa /etc/ganesha/ganesha.conf
+RUN sed -i 's/\r$//' /etc/dnsmasq-tftp.conf /etc/ganesha/ganesha.conf
 
 #RUN ganesha.nfsd -L /var/log/ganesha/ganesha.log

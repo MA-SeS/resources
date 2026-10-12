@@ -35,11 +35,10 @@ services:
 
     user: root
 
-    # Published ports for tftp and nfs services, on all interfaces
     ports:
-      - "69:69/udp"        # TFTP
-      - "2049:2049/tcp"    # NFS
-      - "20048:20048/tcp"  # NFS mountd
+      - "69:69/udp"
+      - "2049:2049/tcp"
+      - "20048:20048/tcp"
 
     volumes:
       - ..:/workspace
@@ -51,7 +50,7 @@ services:
       - /bin/sh
       - -ec
       - |
-        service tftpd-hpa start
+        dnsmasq --conf-file=/etc/dnsmasq-tftp.conf &
         exec ganesha.nfsd -F -L /var/log/ganesha/ganesha.log -f /etc/ganesha/ganesha.conf
 
 # We create a volume for buildroot to avoid any problems with the "fakeowner" bug in
