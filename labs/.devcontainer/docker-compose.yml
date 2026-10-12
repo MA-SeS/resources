@@ -1,10 +1,7 @@
 services:
 
   toolchain:
-    build:
-      context: buildroot/devenv
-      dockerfile: Dockerfile
-  
+    image: ma-ses-toolchain:latest
     #cap_add:
     #- MKNOD
 
@@ -13,7 +10,8 @@ services:
 
     privileged: true
 
-    user: vscode
+    # Repair the named-volume owner before dropping to vscode in the command below.
+    user: root
     
     environment:
     - TZ=Europe/Zurich
@@ -28,16 +26,14 @@ services:
       - nfs-rootfs:/workspace/nfs-rootfs
 
     # Clone Buildroot into the volume on first startup, then keep the container alive.
-    command: /bin/sh -c "set -e; chown vscode:vscode /workspace/buildroot ; if [ ! -f /workspace/buildroot/Makefile ]; then git clone https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts 2025.02.17; fi; exec /bin/sh -c 'while sleep 1000; do :; done'"
+    command: /bin/sh -c "set -e; chown vscode:vscode /workspace/buildroot; exec su vscode -s /bin/sh -c 'if [ ! -f /workspace/buildroot/Makefile ]; then git clone https://github.com/buildroot/buildroot /workspace/buildroot; git -C /workspace/buildroot checkout -b local-lts 2025.02.17; fi; while sleep 1000; do :; done'"
 
   servers:
-    build:
-      context: servers/ctxt
-      dockerfile: Dockerfile
+    image: ma-ses-servers:latest
 
     privileged: true
 
-    user: vscode
+    user: root
 
     # Published ports for tftp and nfs services, on all interfaces
     ports:
@@ -51,7 +47,12 @@ services:
       - tftpd-data:/workspace/tftpd
       - nfs-rootfs:/workspace/nfs-rootfs
 
-    command: sleep infinity
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        service tftpd-hpa start
+        exec ganesha.nfsd -F -L /var/log/ganesha/ganesha.log -f /etc/ganesha/ganesha.conf
 
 # We create a volume for buildroot to avoid any problems with the "fakeowner" bug in
 # tftpd-data is to store files to be served by the tftpd service

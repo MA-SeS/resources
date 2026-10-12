@@ -1,0 +1,16 @@
+{
+    "name": "ses - Services (tftpd, nfsd)",
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "servers",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "remoteUser": "vscode",
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "ms-vscode.cpptools"
+            ]
+        }
+    }
+}

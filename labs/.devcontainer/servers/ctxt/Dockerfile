@@ -22,4 +22,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY tftpd-hpa /etc/default/
 COPY ganesha.conf /etc/ganesha/
 
+RUN sed -i 's/\r$//' /etc/default/tftpd-hpa /etc/ganesha/ganesha.conf
+
 #RUN ganesha.nfsd -L /var/log/ganesha/ganesha.log

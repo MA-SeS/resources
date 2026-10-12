@@ -1,13 +1,18 @@
 {
-	"name": "ses - Services (tftpd, nfsd)",
+    "name": "ses - Services (tftpd, nfsd)",
     "dockerComposeFile": ["../docker-compose.yml"],
     "service": "servers",
+    "runServices": ["toolchain", "servers"],
+    "initializeCommand": "cd .. && set BUILDX_BAKE_FILE_RELATIVE_PATHS=1 && docker buildx bake --allow fs.read=labs -f labs/.devcontainer/docker-compose.build.yml toolchain servers",
     "workspaceFolder": "/workspace",
     "shutdownAction": "stopCompose",
-    "runArgs": ["--privileged"],
-    "settings": {},
-    "extensions": [
-        "ms-vscode.cpptools"
-    ],
-    "remoteUser": "vscode"
+    "remoteUser": "vscode",
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "ms-vscode.cpptools"
+            ]
+        }
+    }
 }

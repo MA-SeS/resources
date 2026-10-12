@@ -1,0 +1,12 @@
+services:
+  toolchain:
+    image: ma-ses-toolchain:latest
+    build:
+      context: buildroot/devenv
+      dockerfile: Dockerfile
+
+  servers:
+    image: ma-ses-servers:latest
+    build:
+      context: servers/ctxt
+      dockerfile: Dockerfile
