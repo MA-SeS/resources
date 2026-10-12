@@ -20,6 +20,12 @@ fi
 echo "Replacing contents of $DST_DIR with $SRC"
 sudo find "$DST_DIR" -mindepth 1 -delete
 sudo tar --numeric-owner -xpf "$SRC" -C "$DST_DIR"
+
+# With an NFS root, eth0 is already configured by the kernel (ip= option).
+# Do not let ifup touch it: Buildroot's nfs_check would skip it anyway, but
+# makes S40network report FAIL.
+sudo sed -i 's/^auto eth0$/# auto eth0 (configured by the kernel ip= option for NFS root)/' \
+	"$DST_DIR/etc/network/interfaces"
 sync
 echo "Done."
 
