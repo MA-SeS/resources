@@ -52,5 +52,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     # Clean up apt caches to keep the container lightweight
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Ubuntu 25.10+ ships the Rust coreutils (uutils) by default, and Buildroot
+# refuses to build with uutils 'install'. The GNU version is still installed as
+# 'gnuinstall': make /usr/bin/install point to it.
+# (ln -sf fails with uutils, hence rm first.)
+RUN rm /usr/bin/install && ln -s gnuinstall /usr/bin/install
+
 # ENSURE VSCODE USER IS ACTIVE:
 USER vscode
